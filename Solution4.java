@@ -20,15 +20,16 @@ class Solution4 {
         int maxVal = Arrays.stream(nums).max().getAsInt();
         int[] buf = new int[n];
 
-        // exp 表示当前处理的十进制位：1、10、100……
-        long exp = 1;
+        // 【修改】原代码用 long exp 并在取位时强转 int；
+        // nums[i] <= 10^9，int 足够表示所有位权，改为 int 去掉强转
+        int exp = 1;
 
         while (maxVal >= exp) {
             int[] count = new int[10];
 
-            // 统计当前位上每个数字出现的次数
+            // 统计当前位上每个数字出现的次数（去掉了多余的 (int) 强转）
             for (int value : nums) {
-                int digit = (int) ((value / exp) % 10);
+                int digit = (value / exp) % 10;
                 count[digit]++;
             }
 
@@ -37,9 +38,9 @@ class Solution4 {
                 count[i] += count[i - 1];
             }
 
-            // 从后向前遍历，保证计数排序的稳定性
+            // 从后向前遍历，保证计数排序的稳定性（去掉了多余的 (int) 强转）
             for (int i = n - 1; i >= 0; i--) {
-                int digit = (int) ((nums[i] / exp) % 10);
+                int digit = (nums[i] / exp) % 10;
                 buf[--count[digit]] = nums[i];
             }
 
